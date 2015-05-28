@@ -1,7 +1,6 @@
 if typeof require is 'function'
   _ = require 'underscore-plus'
   $ = jQuery = require 'jquery'
-  Grim = require 'grim'
 else
   {_, jQuery} = window
   $ = jQuery
@@ -285,7 +284,7 @@ $.fn.view = ->
   if element = @[0]
     if element.__spacePenView? and not element.__allowViewAccess
       viewConstructorName = element.__spacePenView.constructor.name
-      Grim?.deprecate("Accessing `#{viewConstructorName}` via `$::view()` is deprecated. Use the raw DOM node or underlying model object instead.")
+      console?.log("Accessing `#{viewConstructorName}` via `$::view()` is deprecated. Use the raw DOM node or underlying model object instead.")
     element.spacePenView
 
 $.fn.views = -> @toArray().map (elt) ->
@@ -482,7 +481,7 @@ $.fn.command = (eventName, handler) ->
 JQueryEventAdd = jQuery.event.add
 jQuery.event.add = (elem, types, handler, data, selector) ->
   if /\:/.test(types)
-    Grim?.deprecate """
+    console?.log """
       Are you trying to listen for the '#{types}' Atom command with `jQuery::on`?
       `jQuery::trigger` can no longer be used to listen for Atom commands. Please
       use `atom.commands.add` instead. See the docs at
@@ -495,7 +494,7 @@ unless $.fn.originalTrigger?
   $.fn.originalTrigger = $.fn.trigger
   $.fn.trigger = (eventName, data) ->
     if typeof eventName is 'string' and /\:/.test(eventName) and eventName not in ['cursor:moved', 'selection:changed', 'editor:display-updated']
-      Grim?.deprecate """
+      console?.log """
         Are you trying to dispatch the '#{eventName}' Atom command with `jQuery::trigger`?
         `jQuery::trigger` can no longer emit Atom commands as it will not correctly route
         the command to its handlers. Please use `atom.commands.dispatch` instead.
